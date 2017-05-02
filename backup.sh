@@ -1,5 +1,5 @@
 #!/bin/bash
-#Simple backup scripts to copy contains of ic-scripts/deployments into /ic-scripts-archive
+#Simple backup scripts to copy contains of scripts into /scripts-archive
 #ONLY ALLOWED TO RUN on NON-PROD hosts
 #Author: SN
 #Version: 1.0

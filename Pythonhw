@@ -1,0 +1,410 @@
+
+# Homework 3.1
+  2    
+  3    import sys
+  4    FILENAME = 'Fama-French_data.txt'
+  5    
+  6    def usage():
+  7        exit('Usage:  {} [4-digit year]'.format(sys.argv[0]))
+  8    
+  9    
+ 10    def read_user_input():
+ 11        if len(sys.argv) < 2:
+ 12            usage()
+ 13        else:
+ 14            return sys.argv[1]
+ 15    
+ 16    
+ 17    def validate_user_input(uinput):
+ 18        if uinput.isdigit() and len(uinput) == 4:
+ 19            return True
+ 20        else:
+ 21            return False
+ 22    
+ 23    
+ 24    def get_year_sum_and_count(filename,user_year):
+ 25        fh = open(filename)
+ 26        sum = 0
+ 27        count = 0
+ 28        for this_line in fh:
+ 29            line = this_line.rstrip()
+ 30            values = line.split()
+ 31            date = values[0]
+ 32            year = date[0:4]
+ 33            if year == user_year:
+ 34                val1_fl = float(values[1])
+ 35                sum = sum + val1_fl
+ 36                count = count + 1
+ 37        return sum, count
+ 38    
+ 39    
+ 40    def report_sum_count_avg(this_sum, count):
+ 41        sum = float(this_sum)
+ 42        cnt = int(count)
+ 43        avg = sum / cnt
+ 44        print("count " + str(cnt) + ", sum " + str(sum) + ", avg " + str(avg))
+ 45    
+ 46    
+ 47    # End of function definitions
+ 48    
+ 49    year = read_user_input()
+ 50    
+ 51    if not validate_user_input(year):
+ 52        usage()
+ 53    
+ 54    mysum, count = get_year_sum_and_count(FILENAME, year)
+ 55    
+ 56    report_sum_count_avg(mysum, count)
+
+
+
+ # Homework 3.2
+  2    
+  3    import sys
+  4    
+  5    inp  = input("Please enter a filename: ")
+  6    file = open(inp)
+  7    text = file.read()
+  8    
+  9    num_of_lines = len(text.splitlines())
+ 10    num_of_words = len(text.split())
+ 11    num_of_chars = len(text)
+ 12    
+ 13    nol_str = str(num_of_lines)
+ 14    now_str = str(num_of_words)
+ 15    noc_str = str(num_of_chars)
+ 16    
+ 17    print(nol_str.rjust(8), now_str.rjust(8), noc_str.rjust(8), inp)
+
+# Homework 3.3
+  2    
+  3    import urllib.request
+  4    
+  5    url = 'http://data.cityofnewyork.us/api/views/kku6-nxdu/rows.csv?accessType=DOWNLOAD'
+  6    
+  7    url_data = urllib.request.urlopen(url)
+  8    
+  9    data = url_data.readlines()
+ 10    
+ 11    for this_line in data:
+ 12        line = this_line.rstrip()
+ 13        print(line)
+ 14    
+ 15    print()
+ 16    print(data[15:18])
+ 17    
+ 18    url_data.close()
+
+  # Homework 4.1
+  2    
+  3    import sys
+  4    
+  5    FILENAME = 'F-F_Research_Data_Factors_daily.txt'
+  6    
+  7    def take_validate_user_input():
+  8        if len(sys.argv) < 2:
+  9            usage('please enter 4-digit year')
+ 10        elif sys.argv[1].isdigit() and len(sys.argv[1]) == 4:
+ 11            return sys.argv[1]
+ 12        else:
+ 13            usage('arg must be 4-digit year')
+ 14    
+ 15    
+ 16    def usage(msg):
+ 17        print('ERROR:  ' + msg)
+ 18        exit('Usage:  {} [4-digit year]'.format(sys.argv[0]))
+ 19    
+ 20    
+ 21    def get_data_lines(filename):
+ 22        file = open(filename)
+ 23        text = file.read()
+ 24        lines = text.splitlines()
+ 25        return lines[5:-2]
+
+# Homework 4.2
+  2    
+  3    WORDS_FILENAME = 'words.txt'
+  4    TEST_FILENAME = 'sawyer.txt'
+  5    
+  6    
+  7    def normalize_word(word):
+  8        norm_word = word.lower().rstrip('!;?.,:')
+  9        return norm_word
+ 10    
+ 11    
+ 12    def load_spelling_words(filename):
+ 13        w_set = set()
+ 14        words = open(filename).read().splitlines()
+ 15        for x in words:
+ 16            y = normalize_word(x)
+ 17            w_set.add(y)
+ 18        return w_set
+ 19    
+ 20    
+ 21    def report_misspelled(test_filename, word_set):
+ 22        file = open(test_filename)
+ 23        line_count = 0
+ 24        for line in file:
+ 25            line_count = line_count + 1
+ 26            linewords = line.split()
+ 27            for word in linewords:
+ 28                norm_word = normalize_word(word)
+ 29                if norm_word not in word_set:
+ 30                    print('misspelled word on line {}: {}'.format(line_count, norm_word))
+ 31    
+ 32    ###### End of function defs #####
+ 33    
+ 34    
+ 35    word_set = load_spelling_words(WORDS_FILENAME)
+ 36    
+ 37    print('{} words in spelling words'.format(len(word_set)))
+ 38    
+ 39    print('')
+ 40    
+ 41    report_misspelled(TEST_FILENAME, word_set)
+
+#HW5.1
+
+ def get_user_key():
+  2        if len(sys.argv) == 2:
+  3            return sys.argv[1]
+  4        else:
+  5            return None
+  6    
+  7    # Code passed all tests
+
+HW5.2
+
+ def get_user_dict(fname):
+  2        fh = open(fname)
+  3        next(fh)
+  4    
+  5        user_dict = {}
+  6    
+  7        for line in fh:
+  8            line = line.rstrip()
+  9            items = line.split(':')
+ 10            key = items[0]
+ 11            data = items[1:]
+ 12            user_dict[key] = data
+ 13    
+ 14        return user_dict
+ 15    
+ 16    # Code passed all tests
+
+HW5.3
+
+ def output_address(row_list):
+  2        fname = row_list[0]
+  3        lname = row_list[1]
+  4        street_addr = row_list[2]
+  5        city = row_list[3]
+  6        state = row_list[4]
+  7        zip = row_list[5]
+  8    
+  9        addr_string = "{} {}\n{}\n{}, {}  {}".format(fname, lname, street_addr, city, state, zip)
+ 10    
+ 11        return addr_string
+
+HW5.4
+
+def loop_through_and_print(user_dict):
+  2        for key in user_dict:
+  3            data = output_address(student_dict[key])
+  4            print(data)
+  5            print()
+
+HW5.5
+
+def get_user_choices():
+  2        if len(sys.argv) != 3:
+  3            usage("Wrong number of arguments!")
+  4    
+  5        if not sys.argv[1].isdigit():
+  6            usage("First argument is not a digit.")
+  7        else:
+  8            arg1 = int(sys.argv[1])
+  9    
+ 10        if sys.argv[2] not in ['ascending', 'descending']:
+ 11            usage("2nd argument should be 'ascending' or 'descending'")
+ 12        elif sys.argv[2] == 'ascending':
+ 13            arg2 = False
+ 14        elif sys.argv[2] == 'descending':
+ 15            arg2 = True
+ 16    
+ 17        return arg1, arg2
+ 18    
+ 19    # Code passed all tests
+
+HW5.6
+
+
+  1    def get_data_lines(filename):
+  2        all_lines = open(filename).read().splitlines()
+  3        data_lines = all_lines[5:-2]
+  4        return data_lines
+  5    
+  6    
+  7    #code passwd all tests
+
+HW5.7
+
+ def build_dict(wanted_lines):
+  2        sumdict = {}
+  3        for line in wanted_lines:
+  4            year = line[0:4]
+  5            data = line.split()
+  6            mktrf = float(data[1])
+  7            if year not in sumdict:
+  8                sumdict[year] = mktrf
+  9            else:
+ 10                sumdict[year] = sumdict[year] + mktrf
+ 11    
+ 12        return sumdict
+ 13    
+ 14    # code passed all tests
+
+HW5.8
+def get_sorted_years(days, num_results, direction):
+  2        sorted_keys_list = sorted(days, reverse=direction, key=days.get)
+  3        final_keys_list = sorted_keys_list[0:num_results]
+  4        return final_keys_list
+  5    
+  6    # code passed all tests
+
+ # Homework 6.1
+  2    
+  3    source_fname = 'dated_file.csv'
+  4    target_fname = 'sorted_file.csv'
+  5    
+  6    
+  7    def line_by_date(this_line):
+  8        line_items = this_line.split(',')
+  9        date = line_items[0]
+ 10        date_list = date.split('/')
+ 11        date_value = int(date_list[2] + date_list[1] + date_list[0])
+ 12        return date_value
+ 13    
+ 14    fh = open(source_fname)
+ 15    lines = fh.readlines()
+ 16    
+ 17    slines = sorted(lines, key=line_by_date)
+ 18    
+ 19    wfh = open(target_fname, 'w')   # open file for writing
+ 20    for line in slines:
+ 21        wfh.write(line)
+ 22    wfh.close()
+
+# Homework 6.2
+  2    
+  3    import json
+  4    
+  5    fh = open('config.json')
+  6    conflist = json.load(fh)
+  7    
+  8    for itemdict in conflist:
+  9        print('domain: {}'.format(itemdict['domain']))
+ 10        print('db_host: {}'.format(itemdict['database']['host']))
+ 11        print('db_port: {}'.format(itemdict['database']['port']))
+ 12    
+ 13        plugin_list = itemdict['plugins']
+ 14        print('plugins:')
+ 15        for plugin in plugin_list:
+ 16            print('  {}'.format(plugin))
+ 17    
+ 18        print()
+ # Homework 7.1
+  2    
+  3    import sys
+  4    FILENAME = 'FF_tiny.txt'
+  5    
+  6    def usage():
+  7        exit('please enter a 4 digit year')
+  8    
+  9    def read_user_input():
+ 10        if len(sys.argv) < 2:
+ 11            usage()
+ 12        else:
+ 13            return sys.argv[1]
+ 14    
+ 15    def validate_user_input(uinput):
+ 16        if uinput.isdigit() and len(uinput) == 4:
+ 17            return True
+ 18        else:
+ 19            return False
+ 20    
+ 21    ###### End of function defs #####
+ 22    
+ 23    
+ 24    fh = open(FILENAME)
+ 25    year = read_user_input()
+ 26    
+ 27    if not validate_user_input(year):
+ 28        usage()
+ 29    
+ 30    mktrf = [ line.split()[1] for line in fh if line.split()[0][0:4] == year ]
+ 31    print(mktrf)
+
+#Homework 7.2
+  2    
+  3    fh = open('FF_tiny.txt')
+  4    
+  5    mktrf_dict = {}
+  6    
+  7    all_lines = fh.read().splitlines()
+  8    
+  9    for line in all_lines:
+ 10        items = line.split()
+ 11        year = items[0][0:4]
+ 12        mktrf = float(items[1])
+ 13        if year not in mktrf_dict:
+ 14            mktrf_dict[year] = [mktrf]
+ 15        else:
+ 16            mktrf_dict[year].append(mktrf)
+ 17    
+ 18    sorted_keys = sorted(mktrf_dict, key=lambda arg: sum(mktrf_dict[arg]))
+ 19    
+ 20    for key in sorted_keys:
+ 21        print("{}: {}".format(key, mktrf_dict[key]))
+ 22    
+
+ #Homework 8.1
+  2    
+  3    import sys, os
+  4    
+  5    def usage(msg):
+  6        print()
+  7        print(msg)
+  8        exit()
+  9    
+ 10    def get_input():
+ 11        if len(sys.argv) < 3:
+ 12            usage('Please enter a directory and a search string')
+ 13        elif not os.path.isdir(sys.argv[1]):
+ 14            usage('Directory {} not found'.format(sys.argv[1]))
+ 15        else:
+ 16            return sys.argv[1], sys.argv[2]
+ 17    
+ 18    #### End of function defs #####
+ 19    
+ 20    
+ 21    search_dir, search_string = get_input()
+ 22    
+ 23    for entry in os.listdir(search_dir):
+ 24    
+ 25        if entry.endswith('.zip'):
+ 26            continue
+ 27        if entry.startswith('.'):
+ 28            continue
+ 29    
+ 30        file = os.path.join(search_dir, entry)
+ 31    
+ 32        if os.path.isfile(file):
+ 33            fh = open(file)
+ 34            all_lines = fh.readlines()
+ 35            counter = 0
+ 36            for line in all_lines:
+ 37                counter = counter + 1
+ 38                if search_string in line:
+ 39                    print('{} (line {}): {}'.format(entry, counter, line))
+ 40    
